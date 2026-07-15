@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Result - Smart Lender</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="bi bi-shield-check-fill me-2 text-bank-blue"></i>Smart Lender
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('predict_route') }}">Check Eligibility</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}#aboutSection">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5 my-auto">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 text-center">
+                
+                {% if status == "Loan Approved" %}
+                    <!-- APPROVED CONTAINER -->
+                    <div class="status-card status-card-approved">
+                        <div class="status-icon-wrapper status-icon-approved">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+                        <h2 class="text-bank-blue mb-3">Congratulations!</h2>
+                        <p class="text-secondary fs-5 mb-4">Based on the information you provided, you are likely eligible for loan approval.</p>
+                        <p class="text-muted small border-top pt-3 mb-5">This prediction is for informational purposes only. Final approval depends on the bank's verification process.</p>
+                        
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ url_for('predict_route') }}" class="btn btn-primary-custom px-4 py-2">
+                                Check Again <i class="bi bi-arrow-repeat ms-2"></i>
+                            </a>
+                            <a href="{{ url_for('home') }}" class="btn btn-secondary-custom px-4 py-2">
+                                Back to Home <i class="bi bi-house ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- REJECTED CONTAINER -->
+                    <div class="status-card status-card-rejected">
+                        <div class="status-icon-wrapper status-icon-rejected">
+                            <i class="bi bi-x-lg"></i>
+                        </div>
+                        <h2 class="text-bank-blue mb-3">Loan Not Approved</h2>
+                        <p class="text-secondary fs-5 mb-4">Based on the provided information, you may not currently meet the eligibility criteria.</p>
+                        <p class="text-muted small border-top pt-3 mb-5">Please review your details or consult your financial institution for further assistance.</p>
+                        
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ url_for('predict_route') }}" class="btn btn-primary-custom px-4 py-2">
+                                Check Again <i class="bi bi-arrow-repeat ms-2"></i>
+                            </a>
+                            <a href="{{ url_for('home') }}" class="btn btn-secondary-custom px-4 py-2">
+                                Back to Home <i class="bi bi-house ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Optional Details Panel -->
+                <div class="bank-card p-4 text-start mt-5">
+                    <h5 class="border-bottom pb-2 mb-3 text-bank-blue"><i class="bi bi-file-earmark-text me-2"></i>Submitted Credit Profile Summary</h5>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Applicant Income</span>
+                            <span class="fw-bold text-dark">${{ raw_inputs.get('ApplicantIncome', '0') }}/mo</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Coapplicant Income</span>
+                            <span class="fw-bold text-dark">${{ raw_inputs.get('CoapplicantIncome', '0') }}/mo</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Requested Loan Amount</span>
+                            <span class="fw-bold text-dark">${{ raw_inputs.get('LoanAmount', '0') }},000</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Loan Repayment Term</span>
+                            <span class="fw-bold text-dark">{{ raw_inputs.get('Loan_Amount_Term', '360') }} Months</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Credit History Status</span>
+                            <span class="fw-bold text-dark">
+                                {% if raw_inputs.get('Credit_History') == '1.0' %}
+                                    Good / Established
+                                {% else %}
+                                    Poor / None
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted d-block small uppercase font-monospace">Property Location</span>
+                            <span class="fw-bold text-dark">{{ raw_inputs.get('Property_Area', 'N/A') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <h4 class="text-white mb-1">Smart Lender</h4>
+                    <p class="mb-0 text-muted">Loan Eligibility Prediction System</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="{{ url_for('home') }}">Home</a></li>
+                        <li class="list-inline-item ms-3"><a href="{{ url_for('predict_route') }}">Check Eligibility</a></li>
+                        <li class="list-inline-item ms-3"><a href="{{ url_for('home') }}#aboutSection">About</a></li>
+                        <li class="list-inline-item ms-3"><a href="{{ url_for('home') }}#aboutSection">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="text-center text-muted">
+                &copy; 2026 Smart Lender.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

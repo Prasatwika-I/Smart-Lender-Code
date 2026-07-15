@@ -1,0 +1,17 @@
+# Windows folder configuration files
+desktop.ini
+Thumbs.db
+
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Virtual environment folders
+venv/
+.venv/
+env/
+.env
