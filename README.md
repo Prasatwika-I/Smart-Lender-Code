@@ -64,3 +64,26 @@ python app.py
 ### 4. Access the Application
 Open your browser and navigate to:
 [http://localhost:5000/](http://localhost:5000/)
+
+---
+
+## 🌐 Cloud Deployment Options
+
+### Option 1: Render (Recommended - Free / Easy)
+1. Push your code to a GitHub repository.
+2. Go to [Render Dashboard](https://dashboard.render.com/) and create a **New Web Service**.
+3. Connect your repository.
+4. Set:
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+
+### Option 2: Railway / Heroku
+- The repository already includes a [`Procfile`](file:///c:/Smart%20Lender/Procfile) configured with `gunicorn`. Connecting your GitHub repository will automatically detect and deploy the web service.
+
+### Option 3: Docker Container
+Build and run the container locally or on any cloud container service (AWS ECS, GCP Cloud Run, Azure Container Apps):
+```bash
+docker build -t smart-lender .
+docker run -p 5000:5000 smart-lender
+```

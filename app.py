@@ -114,7 +114,13 @@ def predict_route():
         except Exception as e:
             return render_template('predict.html', error=f"Prediction error: {str(e)}")
 
-    return render_template('predict.html')
+@app.route('/health')
+def health():
+    """Health check endpoint for cloud hosting / load balancers."""
+    model_status = "loaded" if model is not None else "failed"
+    return {"status": "ok", "model": model_status}, 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_DEBUG', 'false').lower() in ('true', '1', 't')
+    app.run(debug=debug, host='0.0.0.0', port=port)
