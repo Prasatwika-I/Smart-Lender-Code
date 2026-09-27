@@ -114,6 +114,8 @@ def predict_route():
         except Exception as e:
             return render_template('predict.html', error=f"Prediction error: {str(e)}")
 
+    return render_template('predict.html')
+
 @app.route('/health')
 def health():
     """Health check endpoint for cloud hosting / load balancers."""
